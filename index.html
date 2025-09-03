@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-09-03 ons 10:44 -->
+<!-- 2025-09-03 ons 10:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Course Home Page</title>
@@ -19,25 +19,7 @@
 <script type="text/javascript" src="src/bigblow_theme/js/bigblow.js"></script>
 <script type="text/javascript" src="src/bigblow_theme/js/hideshow.js"></script>
 <script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
-<script>
-<script> document.addEventListener("DOMContentLoaded", function() {
-<script>  document.querySelectorAll("pre.src").forEach(function(block) {
-<script>    // Create button
-<script>    var button = document.createElement("button");
-<script>    button.innerText = "⧉";
-<script>    button.className = "copy-btn";
-<script>    block.parentNode.insertBefore(button, block);
-<script>
-<script>    // Copy on click
-<script>    button.addEventListener("click", function() {
-<script>      navigator.clipboard.writeText(block.innerText).then(function() {
-<script>        button.innerText = "✓";
-<script>        setTimeout(() => button.innerText = "⧉", 1000);
-<script>      });
-<script>    });
-<script>  });
-<script>});
-<script></script>
+<script> document.addEventListener("DOMContentLoaded", function() { document.querySelectorAll("pre.src").forEach(function(block) { var button = document.createElement("button"); button.innerText = "copy-code"; button.className = "copy-btn"; block.parentNode.insertBefore(button, block); button.addEventListener("click", function() { navigator.clipboard.writeText(block.innerText).then(function() { button.innerText = "copied"; setTimeout(() => button.innerText = "copy-code", 1000); }); }); }); }); </script>
 <style>pre.src{background:#343131;color:white;} </style>
 </head>
 <body>
@@ -46,9 +28,9 @@
 </div>
 <div id="content" class="content">
 <h1 class="title">Course Home Page</h1>
-<div id="outline-container-orgc03e55e" class="outline-2">
-<h2 id="orgc03e55e">Welcome</h2>
-<div class="outline-text-2" id="text-orgc03e55e">
+<div id="outline-container-orgf579376" class="outline-2">
+<h2 id="orgf579376">Welcome</h2>
+<div class="outline-text-2" id="text-orgf579376">
 <p>
 This is the home page of the one-day course on longitudinal causal
 inference. To prepare the course please install the R-package <code>rtmle</code>
@@ -71,9 +53,9 @@ dependent censoring in an aids clinical trial with inverse probability of
 censoring weighted (IPCW) log-rank tests. Biometrics, 56(3):779&#x2013;788, 2000.
 </p>
 </div>
-<div id="outline-container-orgd04fa93" class="outline-3">
-<h3 id="orgd04fa93">Material</h3>
-<div class="outline-text-3" id="text-orgd04fa93">
+<div id="outline-container-orgf048be3" class="outline-3">
+<h3 id="orgf048be3">Material</h3>
+<div class="outline-text-3" id="text-orgf048be3">
 <p>
 <a href="./lecturenotes/lecturenotes.pdf">Lecture notes</a>
 <a href="./practicals/practicals.html">Practicals</a>
