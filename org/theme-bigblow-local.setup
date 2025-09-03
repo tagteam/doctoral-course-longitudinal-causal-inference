@@ -15,21 +15,21 @@
 #+HTML_HEAD: <script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
 
 #+HTML_HEAD: <script>
-document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll("pre.src").forEach(function(block) {
-    // Create button
-    var button = document.createElement("button");
-    button.innerText = "⧉";
-    button.className = "copy-btn";
-    block.parentNode.insertBefore(button, block);
-
-    // Copy on click
-    button.addEventListener("click", function() {
-      navigator.clipboard.writeText(block.innerText).then(function() {
-        button.innerText = "✓";
-        setTimeout(() => button.innerText = "⧉", 1000);
-      });
-    });
-  });
-});
-</script>
+#+HTML_HEAD: <script> document.addEventListener("DOMContentLoaded", function() {
+#+HTML_HEAD: <script>  document.querySelectorAll("pre.src").forEach(function(block) {
+#+HTML_HEAD: <script>    // Create button
+#+HTML_HEAD: <script>    var button = document.createElement("button");
+#+HTML_HEAD: <script>    button.innerText = "⧉";
+#+HTML_HEAD: <script>    button.className = "copy-btn";
+#+HTML_HEAD: <script>    block.parentNode.insertBefore(button, block);
+#+HTML_HEAD: <script>
+#+HTML_HEAD: <script>    // Copy on click
+#+HTML_HEAD: <script>    button.addEventListener("click", function() {
+#+HTML_HEAD: <script>      navigator.clipboard.writeText(block.innerText).then(function() {
+#+HTML_HEAD: <script>        button.innerText = "✓";
+#+HTML_HEAD: <script>        setTimeout(() => button.innerText = "⧉", 1000);
+#+HTML_HEAD: <script>      });
+#+HTML_HEAD: <script>    });
+#+HTML_HEAD: <script>  });
+#+HTML_HEAD: <script>});
+#+HTML_HEAD: <script></script>
