@@ -5,3 +5,6 @@
 * Welcome
 
 This is the home page of the one-day course on longitudinal causal inference.
+
+** Material
+
