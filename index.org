@@ -1,6 +1,6 @@
 #+TITLE: Course Home Page
 #+OPTIONS: toc:nil num:nil
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="~/styles/practicals.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="practicals.css" />
 
 * Welcome
 
