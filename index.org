@@ -1,10 +1,31 @@
 #+TITLE: Course Home Page
 #+OPTIONS: toc:nil num:nil
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="practicals.css" />
+#+SETUPFILE: ~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/org/theme-bigblow-local.setup
+#+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+
+
 
 * Welcome
 
-This is the home page of the one-day course on longitudinal causal inference.
+This is the home page of the one-day course on longitudinal causal
+inference. To prepare the course please install the R-package =rtmle=
+from github
+
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(devtools)
+install_github("tagteam/rtmle")
+#+END_SRC
+
+read:
+
+James M Robins and Dianne M Finkelstein. Correcting for noncompliance and
+dependent censoring in an aids clinical trial with inverse probability of
+censoring weighted (IPCW) log-rank tests. Biometrics, 56(3):779--788, 2000.
+
+
+
 
 ** Material
 
+[[./lecturenotes/lecturenotes.pdf][Lecture notes]]
+[[./practicals/practicals.org][Practicals]]
