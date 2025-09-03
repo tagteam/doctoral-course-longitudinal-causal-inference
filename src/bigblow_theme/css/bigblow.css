@@ -755,6 +755,22 @@ p.verse {
   text-decoration:underline
 }
 
+.copy-btn {
+  float: right;
+  margin: 4px;
+  padding: 2px 6px;
+  font-size: 0.8em;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: #e0e0e0;
+}
+
+
 /* This is for the sake of Emacs. */
 /* Local Variables: */
 /* eval: (when (locate-library "rainbow-mode") (require 'rainbow-mode) (rainbow-mode)) */
