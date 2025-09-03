@@ -1,6 +1,6 @@
 #+TITLE: Course Home Page
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
 #+OPTIONS: toc:nil num:nil
+#+SETUPFILE: ~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/org/theme-bigblow-local.setup
 
 * Welcome
 
