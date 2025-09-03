@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     block.parentNode.insertBefore(wrapper, block);
     wrapper.appendChild(block);
 
-    // Add button
+    // Add button (as sibling, but positioned absolutely)
     var button = document.createElement("button");
     button.innerText = "⧉";
     button.className = "copy-btn";
