@@ -1,0 +1,23 @@
+#+TITLE: Practicals
+#+Author: Thomas Alexander Gerds
+#+Date: 
+#+EMAIL: tag@biostat.ku.dk
+#+LaTeX_CLASS: org-article
+#+OPTIONS: toc:nil
+#+LaTeX_HEADER:\usepackage{authblk}
+#+LaTeX_HEADER:\usepackage{natbib}
+#+LaTeX_HEADER:\author{Thomas Alexander Gerds}
+#+LaTeX_HEADER:\affil{Department of Biostatistics, University of Copenhagen}
+#+setupfile:~/emacs-genome/snps/org-templates/setup-all-purpose.org
+# #+superman-org-export-target: pdf
+
+* Practical 1
+
+
+
+* Practical 2
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
+library(rtmle)
+#+END_SRC
