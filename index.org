@@ -1,3 +1,7 @@
+#+TITLE: Course Home Page
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+OPTIONS: toc:nil num:nil
+
 * Welcome
 
 This is the home page of the one-day course on longitudinal causal inference.
