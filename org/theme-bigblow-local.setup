@@ -14,4 +14,4 @@
 #+HTML_HEAD: <script type="text/javascript" src="src/bigblow_theme/js/hideshow.js"></script>
 #+HTML_HEAD: <script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
 
-#+HTML_HEAD: <script> document.addEventListener("DOMContentLoaded", function() { document.querySelectorAll("pre.src").forEach(function(block) { var button = document.createElement("button"); button.innerText = "copy-code"; button.className = "copy-btn"; block.parentNode.insertBefore(button, block); button.addEventListener("click", function() { navigator.clipboard.writeText(block.innerText).then(function() { button.innerText = "copied"; setTimeout(() => button.innerText = "copy-code", 1000); }); }); }); }); </script>
+#+HTML_HEAD: <script src="src/bigblow_theme/js/copy-code.js"></script>
