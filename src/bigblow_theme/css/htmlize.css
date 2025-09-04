@@ -129,7 +129,7 @@
 .org-shadow { /* shadow */ color: #7f7f7f; }
 .org-show-paren-match { /* show-paren-match */ background-color: #40e0d0; }
 .org-show-paren-mismatch { /* show-paren-mismatch */ color: #ffffff; background-color: #a020f0; }
-.org-string { /* font-lock-string-face */ color: #8b2252; }
+.org-string { /* font-lock-string-face */ color: #ff82ab; }
 .org-tool-bar { /* tool-bar */ color: #000000; background-color: #bfbfbf; }
 .org-tooltip { /* tooltip */ color: #000000; background-color: #ffffe0; }
 .org-trailing-whitespace { /* trailing-whitespace */ background-color: #ff0000; }

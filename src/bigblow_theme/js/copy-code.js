@@ -8,15 +8,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add button (as sibling, but positioned absolutely)
     var button = document.createElement("button");
-    button.innerText = "⧉";
+    button.innerText = "copy-code";
     button.className = "copy-btn";
     wrapper.appendChild(button);
 
     // Copy on click
     button.addEventListener("click", function() {
       navigator.clipboard.writeText(block.innerText).then(function() {
-        button.innerText = "✓";
-        setTimeout(() => button.innerText = "⧉", 1000);
+        button.innerText = "copied";
+        setTimeout(() => button.innerText = "copy-code", 1000);
       });
     });
   });
