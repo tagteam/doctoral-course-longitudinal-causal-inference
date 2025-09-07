@@ -22,7 +22,20 @@ James M Robins and Dianne M Finkelstein. Correcting for noncompliance and
 dependent censoring in an aids clinical trial with inverse probability of
 censoring weighted (IPCW) log-rank tests. Biometrics, 56(3):779--788, 2000.
 
+** Plan 
 
+- Target trial emulation
+- Practical I 
+
+ break 
+
+- Roadmap of statistical learning
+- Practical II 
+
+ lunch
+
+- Longitudinal targeted minimum-loss based estimation
+- Practical III
 
 
 ** Material
