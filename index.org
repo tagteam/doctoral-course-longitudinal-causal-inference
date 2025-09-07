@@ -16,11 +16,6 @@ library(devtools)
 install_github("tagteam/rtmle")
 #+END_SRC
 
-read:
-
-James M Robins and Dianne M Finkelstein. Correcting for noncompliance and
-dependent censoring in an aids clinical trial with inverse probability of
-censoring weighted (IPCW) log-rank tests. Biometrics, 56(3):779--788, 2000.
 
 ** Plan 
 

@@ -18,9 +18,8 @@ The practicals will appear here.
 
 ** TODO 
 
-Read the abstract of Robins & Finkelstein (2000). Biometrics 56,
-pages 779--788. For your convenience the abstract is pasted in
-here.
+Read the abstract of Robins & Finkelstein (2000). Biometrics 56, pages
+779--788.  For your convenience the abstract is pasted in here.
 
 #+BEGIN_EXAMPLE
 SUMMARY. AIDS Clinical Trial Group (ACTG) randomized trial 021 compared the effect of bactrim versus
