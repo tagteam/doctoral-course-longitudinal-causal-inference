@@ -15,3 +15,4 @@
 #+HTML_HEAD: <script type="text/javascript" src="../src/lib/js/jquery.stickytableheaders.min.js"></script>
 
 #+HTML_HEAD: <script src="../src/bigblow_theme/js/copy-code.js"></script>
+#+HTML_HEAD: <script src="../src/bigblow_theme/js/folding-examples.js"></script>

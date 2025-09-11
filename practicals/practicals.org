@@ -12,29 +12,40 @@
 # #+setupfile:~/emacs-genome/snps/org-templates/setup-all-purpose.org
 #+superman-org-export-target: html
 
-The practicals will appear here.
 
-* COMMENT Practical 1
+* Practical 1
+
 
 ** TODO 
 
 Read the abstract of Robins & Finkelstein (2000). Biometrics 56, pages
 779--788.  For your convenience the abstract is pasted in here.
 
+#+HTML: <div class="foldable-example">
+#+HTML: <div class="header">Abstract Robins & Finkelstein (2000) (click to expand)</div>
+#+HTML: <div class="content">
 #+BEGIN_EXAMPLE
-SUMMARY. AIDS Clinical Trial Group (ACTG) randomized trial 021 compared the effect of bactrim versus
-aerosolized pentamidine (AP) as prophylaxis therapy for pneumocystis pneumonia (PCP) in AIDS patients.
-Although patients randomized to the bactrim arm experienced a significant delay in time to PCP, the
-survival experience in the two arms was not significantly different (p = .32). In this paper, we present
-evidence that bactrim therapy improves survival but that the standard intent-to-treat comparison failed to
-detect this survival advantage because a large fraction of the subjects either crossed over to the other therapy
-or stopped therapy altogether. We obtain our evidence of a beneficial bactrim effect on survival by artificially
-regarding the subjects as dependently censored at the first time the subject either stops or switches therapy;
-we then analyze the data with the inverse probability of censoring weighted Kaplan-Meier and Cox partial
-likelihood estimators of Robins (1993, Proceedings of the Biopharmaceutical Section, American Statistical
-Association, pp. 24-33) that adjust for dependent censoring by utilizing data collected on time-dependent
-prognostic factors.
+SUMMARY. AIDS Clinical Trial Group (ACTG) randomized trial 021
+compared the effect of bactrim versus aerosolized pentamidine (AP) as
+prophylaxis therapy for pneumocystis pneumonia (PCP) in AIDS patients.
+Although patients randomized to the bactrim arm experienced a
+significant delay in time to PCP, the survival experience in the two
+arms was not significantly different (p = .32). In this paper, we
+present evidence that bactrim therapy improves survival but that the
+standard intent-to-treat comparison failed to detect this survival
+advantage because a large fraction of the subjects either crossed over
+to the other therapy or stopped therapy altogether. We obtain our
+evidence of a beneficial bactrim effect on survival by artificially
+regarding the subjects as dependently censored at the first time the
+subject either stops or switches therapy; we then analyze the data
+with the inverse probability of censoring weighted Kaplan-Meier and
+Cox partial likelihood estimators of Robins (1993, Proceedings of the
+Biopharmaceutical Section, American Statistical Association,
+pp. 24-33) that adjust for dependent censoring by utilizing data
+collected on time-dependent prognostic factors.
 #+END_EXAMPLE
+#+HTML: </div>
+#+HTML: </div>
 
 ** TODO 
 
@@ -43,6 +54,9 @@ Read from the middle of the first column of page 780 starting with
    censoring weighted versions". For your convenience this part of the
    text is pasted in here.
 
+#+HTML: <div class="foldable-example">
+#+HTML: <div class="header">Page 780 Robins & Finkelstein (2000) (click to expand)</div>
+#+HTML: <div class="content">
 #+BEGIN_EXAMPLE
 More precisely, we will report four different causal analyses.
 
@@ -100,15 +114,16 @@ timator, log-rank test, and Cox partial likelihood estimator
 of the ratio of the treatment-arm-specific mortality rates by
 their inverse probability of censoring weighted versions.
 #+END_EXAMPLE
-
+#+HTML: </div>
+#+HTML: </div>
 
 ** TODO 
 
 The authors describe 4 different causal analyses which differ
 regarding how and when the followup data are censored. Describe the
-corresponding treatment regimens/protocols for one of the treatments
-(bactrim or aerosolized pentamidine) of an emulated target
-trial. Write your description in an R-markdown or quarto document.
+corresponding 4 treatment regimens/protocols of a target trial (for
+one of the treatments, e.g., bactrim). Write your description in an
+R-markdown or quarto document.
 
 | Analysis | Description in Finkelstein & Robins                                                                                  | Treatment protocol |
 |----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
@@ -120,8 +135,126 @@ trial. Write your description in an R-markdown or quarto document.
 |----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
 | IV       |                                                                                                                      |                    |
 
+# Possible protocols for the target trial:
+# - Protocol 1 :: During the next 5 years, discontinue statins treatment with a probability of 50% at any day (or doctor visit). Do not resume statins treatment. Stay alive!
+# - Protocol 2 :: Continue statins treatment for 5 years. Stay alive!
 
-* COMMENT Practical 2
+* Practical 2
+
+Inspired by Robins & Finkelstein (2000), we consider the following set
+of uncensored categorical variables on an already discretized time scale
+with 2 time intervals:
+
+\begin{equation*}
+X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
+\end{equation*}
+
+- \(L_0\) = Indicator of Karnofsky score below 75 before start of time interval 1
+- \(V_0\) = Indicator of Asthenia score above 2 before start of time interval 1 
+- \(A_0\) = Use bactrim (value 1) or aerosolized pentamidine (AP) (value 0) in time interval 1
+- \(C_1\) = Indicator of end of followup in time interval 1  
+- \(Y_1\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 1
+- \(D_1\) = Indicator of death in time interval 1
+- \(L_1\) = Indicator of Karnofsky score below 75 before start of time interval 2
+- \(V_1\) = Indicator of Asthenia score above 2 before start of time interval 2
+- \(A_1\) = Continue (value 1), cross-over (value 2) or stop treatment (value 0) in time interval 2
+- \(C_2\) = Indicator of end of followup in time interval 2  
+- \(Y_2\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 2
+- \(D_2\) = Indicator of death in time interval 2
+
+** Mathematics
+
+- Write the formula for the marginal probability of having a PCP
+  pneumocystis pneumonia event before the end of the second time
+  interval in terms of the conditional probabilities of the other
+  variables.
+- For each of the 4 protocols of Practical 1, define the intervention
+  map \(\pi^*\) and write the g-formula.
+   
+
+** Statistics
+
+Read the following text about dimension reduction extracted from pages
+781-782 of Robins & Finkelstein:
+
+#+HTML: <div class="foldable-example">
+#+HTML: <div class="header">Extracted text about dimension reduction from pages 781-782 Robins & Finkelstein (2000) (click to expand)</div>
+#+HTML: <div class="content">
+#+BEGIN_EXAMPLE
+We kept only those prognostic factors significant at the p = .12
+level.  These were Karnovsky score at t coded as one if the Karnovsky
+score was 75 or less and zero otherwise; asthenia score, coded as one
+if the asthenia score was two or greater at t, and hemoglobin at t,
+coded as one if less than or equal to eight and zero otherwise. The
+estimated hazard ratios were 4.2, 2.2, 4.5, respectively. Conditional
+on these three variables the prognostic factors white blood count,
+PCP, and CD4 count did not significantly predict the hazard of death.
+The reader may be surprised, given the well-known prognostic value of
+CD4 and PCP in AIDS patients, AIDS patients, that they were not
+independent predictors of mortality. However, standard analyses do not
+usually adjust for factors such as Karnovsky score and asthenia, which
+are quite sensitive measures of a patient's current clinical condition
+and thus may render CD4 count and PCP history nonpredictive
+conditional on the values of these factors.
+
+We wish to emphasize that the choice of the significance level p = .15
+for variable inclusion or exclusion is somewhat ad hoc. As discussed
+in detail by Robins and Greenland (1986), a more formal, less ad hoc
+approach might be to elicit a subjective prior distribution for the
+joint distribution of all the unknown parameters in the model and
+carry out a full Bayesian analysis. However, such an approach lies
+outside the scope of the present paper.
+#+END_EXAMPLE
+#+HTML: </div>
+#+HTML: </div>
+
+- Discuss pros and cons of dichotomizing the continuous variables.
+- Discuss the pros and cons of removing variables from the regression models.
+- What would be a better criterion than a threshold on the p-values from hazard ratio tests?
+- Discuss how you would approach modelling the propensity of treatment continuation
+  conditional on all 6 predictor variables (Karnovsky score, Asthenia
+  score, hemoglobin, white blood count, CD4 count, pneumocystis
+  pneumonia).
+
+** Epidemiology
+
+- Suppose a package of bactrim contains 45 pills and a patient is
+  supposed to take one pill per day as a longterm prophylactic
+  treatment. How would you define the \(A_1\) variable when the time
+  interval length is 3 months and you know the drug prescription dates?
+- Suppose you have data from a patient who has both a PCP event and
+  also gets lost to followup in time interval 1. How would you code
+  the variables \(Y_1, C_1, D_1\) for this patient?
+- Suppose your task is to fit a logistic regression model for the risk
+  of PCP in time interval 2:
+  + Who do you include in the analysis?
+  + What is the interpretation of the odds?
+  + Suppose only 4 people above 80 contribute to the analysis and they all 
+    stop treatment. Is this a problem and if yes, what can you do about it?
+ 
+
+
+
+** COMMENT G-formula (identification formula)
+\begin{aligned}
+\mathbb{E}[Y_2^{a_0,a_1}]
+&= \sum_{l_0} \, \mathbb{E}[Y_1 \mid A_0 = a_0, L_0 = l_0] \, P(L_0) \\
+&\quad \times \sum_{l_1} \, \mathbb{E}[Y_2 \mid A_0 = a_0, A_1 = a_1, L_0 = l_0, L_1 = l_1, Y_1=1] \\
+&\qquad \times P(L_1 \mid A_0 = a_0, L_0 = l_0, Y_1=1).
+\end{aligned}
+
+
+
+** COMMENT 
+Statins discontinuation or Beta-blockers after MI
+
+- Fill in the standard table:
+  - Left column: *target trial specification*
+  - Right column: *emulated trial specification*
+- Discuss: what is easy to emulate? what is hard?
+
+
+* COMMENT Practical 3
 
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  

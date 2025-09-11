@@ -793,6 +793,28 @@ p.verse {
   background: #e0e0e0;
 }
 
+/* Foldable example blocks */
+.foldable-example {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
+.foldable-example .header {
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+}
+
+.foldable-example .content {
+  display: none; /* collapsed by default */
+  margin-top: 0.5em;
+  white-space: pre-wrap; /* preserve formatting */
+}
+
+
 
 /* This is for the sake of Emacs. */
 /* Local Variables: */
