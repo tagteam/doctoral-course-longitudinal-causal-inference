@@ -35,5 +35,5 @@ install_github("tagteam/rtmle")
 
 ** Material
 
-- [[./lecturenotes/lecturenotes.pdf][Lecture notes]]
+- [[./lecturenotes/longitudinal-causal-inference.pdf][Lecture notes]]
 - [[./practicals/practicals.org][Practicals]]
