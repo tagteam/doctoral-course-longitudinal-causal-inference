@@ -1,0 +1,159 @@
+
+
+# Introduction
+
+This document provides R-codes that demonstrate the usage of
+LTMLE.
+
+Note that the data for the exercises are computer simulated and not
+real. The aim is to illustrate the usage of the software. Read in the
+data. They are given in a format which correspond to electronic health
+records (register data) with dates in calendar time.
+
+
+# Code for practicals III
+
+```{r   }
+library(data.table)
+library(rtmle)
+library(glmnet)
+register_data <- readRDS("_targets/objects/register_data")
+str(register_data) 
+```
+
+The data contain baseline information:
+
+-   `gender` person gender
+-   `bslkarnofsky` Karnofsky score at time zero (0-100)
+-   `start_followup_date` date of first purchase of either AP or bactrim
+
+Time-dependent information:
+
+-   `bactrim` Purchase dates of bactrim
+-   `AP` Purchase dates of AP
+-   `karnofsky` date where Karnofsky score had dropped by at least one unit
+-   `PCP` date where a pneumocystis pneumonia event was recorded
+
+Outcome information: each person has either a date of death or a date
+of last followup (censored date).
+
+Next, initialize an `rtmle` object for the analysis of the survival
+chances and add the data.
+
+```{r   }
+x <- rtmle_init(intervals = 9,
+                name_id = "id",
+                name_outcome = "Death",
+                name_competing = NULL,
+                name_censoring = "Censored",
+                censored_label = "censored")
+x <- add_long_data(x,
+                   outcome_data=register_data$death_data,
+                   censored_data=register_data$censored_data,
+                   competing_data=NULL,
+                   timevar_data=register_data$timevar_data)
+x <- add_baseline_data(x,data=register_data$baseline_data)
+x$data$baseline_data
+x$long_data 
+```
+
+To prepare the LTMLE analysis we discretize the time scale into 9
+intervals, where each interval is 4 months long, starting from the
+individual date where the followup starts, `start_followup_date`.
+Then we map the long data to wide format, still keeping the
+time-varying data in separate data.frames but readily combining the
+outcome and the censored data into a single data.frame.
+
+```{r   }
+intervals <- seq(0,36*30.45,4*30.45)
+x <- long_to_wide(x,
+                  intervals = intervals,
+                  fun = function(x){1 * (sum(x) > 0)},
+                  start_followup_date = "start_followup_date")
+x$data$timevar_data
+x$data$outcome_data 
+```
+
+The next step is to prepare a single wide format dataset where the
+variables are sorted in time (from left to right):
+
+```{r   }
+x <- prepare_data(x)
+x$prepared_data 
+```
+
+Before we continue it is useful to inspect the prepared data. To do
+this, answer the following questions based on the prepared data:
+
+1.  How many people initiate bactrim and how many initiate AP?
+2.  By the end of the first interval, how many people had a PCP event, died or were censored?
+3.  In the 3rd interval, how many people use bactrim, how many AP, how many both, and how many none?
+
+We are now ready to formulate the target parameter:
+
+```{r   }
+x <- protocol(x,
+              name = "Always_bactrim",
+              intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1")),"AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
+x <- protocol(x,
+              name = "Always_AP",
+              intervention = data.frame("bactrim" = factor(rep("0",length(intervals)-1),levels = c("0","1")),"AP" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
+x <- target(x,name = "Outcome_risk",
+            estimator = "tmle",
+            protocols = c("Always_bactrim","Always_AP"))
+x$protocols
+x$targets 
+```
+
+Finally, before running the analysis we need to specify which
+variables should enter in the regression models:
+
+```{r   }
+x <- model_formula(x,exclude_variables = "AP_0",Markov = c("karnofsky","PCP"))
+x$models 
+```
+
+Note that we declare the variable 'AP<sub>0</sub>' as constant because it is
+exactly equal to '1-bactrim<sub>0</sub>' and hence would confuse the analyses.
+
+```{r   }
+x$names$name_constant_variables <- c("AP_0",x$names$name_constant_variables)
+x <- run_rtmle(x,learner = "learn_glmnet")
+summary(x) 
+```
+
+
+# Code for practicals III
+
+```{r   }
+x <- rtmle_init(intervals = 9,name_id = "id",name_outcome = "PCP",name_competing = "Dead",name_censoring = "Censored",censored_label = "censored")
+PCP_data <- register_data$timevar_data$PCP
+setkey(PCP_data,id,date)
+# restrict to first event
+PCP_data <- PCP_data[PCP_data[,.I[1],by = "id"]$V1]
+x <- add_long_data(x,outcome_data=PCP_data,competing_data = register_data$death_data,censored_data=register_data$censored_data,timevar_data=register_data$timevar_data[-1])
+x <- add_baseline_data(x,data=register_data$baseline_data) 
+```
+
+```{r   }
+intervals <- seq(0,36*30.45,4*30.45)
+x <- long_to_wide(x,intervals = intervals,fun = function(x){1 * (sum(x) > 0)},start_followup_date = "start_followup_date")
+x <- prepare_data(x) 
+```
+
+```{r   }
+x <- protocol(x,name = "Always_bactrim",intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1")),"AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
+x <- protocol(x,name = "Always_AP",intervention = data.frame("bactrim" = factor(rep("0",length(intervals)-1),levels = c("0","1")),"AP" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
+x <- target(x,name = "Outcome_risk",estimator = "tmle",protocols = c("Always_bactrim","Always_AP")) 
+```
+
+```{r   }
+x <- model_formula(x,exclude_variables = "AP_0",Markov = c("karnofsky"))
+x$names$name_constant_variables <- c("AP_0",x$names$name_constant_variables) 
+```
+
+```{r   }
+x <- run_rtmle(x,learner = "learn_glmnet")
+summary(x)[,.(Protocol,Target_parameter,Estimate,P_value)] 
+```
+
