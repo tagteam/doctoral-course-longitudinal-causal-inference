@@ -162,7 +162,7 @@ X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
 - \(Y_2\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 2
 - \(D_2\) = Indicator of death in time interval 2
 
-** Mathematics
+** Formula
 
 - Write the formula for the marginal probability of having a PCP
   pneumocystis pneumonia event before the end of the second time
@@ -171,11 +171,10 @@ X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
 - For each of the 4 protocols of Practical 1, define the intervention
   map \(\pi^*\) and write the g-formula.
    
-
-** Statistics
+** Modelling
 
 Read the following text about dimension reduction extracted from pages
-781-782 of Robins & Finkelstein:
+  781-782 of Robins & Finkelstein:
 
 #+HTML: <div class="foldable-example">
 #+HTML: <div class="header">Extracted text about dimension reduction from pages 781-782 Robins & Finkelstein (2000) (click to expand)</div>
@@ -216,12 +215,15 @@ outside the scope of the present paper.
   score, hemoglobin, white blood count, CD4 count, pneumocystis
   pneumonia).
 
-** Epidemiology
+* Practical 3
+
+** Design
 
 - Suppose a package of bactrim contains 45 pills and a patient is
   supposed to take one pill per day as a longterm prophylactic
   treatment. How would you define the \(A_1\) variable when the time
-  interval length is 3 months and you know the drug prescription dates?
+  interval length of the discretized time scale is 3 months and you
+  know the drug prescription dates?
 - Suppose you have data from a patient who has both a PCP event and
   also gets lost to followup in time interval 1. How would you code
   the variables \(Y_1, C_1, D_1\) for this patient?
@@ -231,32 +233,55 @@ outside the scope of the present paper.
   + What is the interpretation of the odds?
   + Suppose only 4 people above 80 contribute to the analysis and they all 
     stop treatment. Is this a problem and if yes, what can you do about it?
- 
 
+** Data analysis
 
-
-** COMMENT G-formula (identification formula)
-\begin{aligned}
-\mathbb{E}[Y_2^{a_0,a_1}]
-&= \sum_{l_0} \, \mathbb{E}[Y_1 \mid A_0 = a_0, L_0 = l_0] \, P(L_0) \\
-&\quad \times \sum_{l_1} \, \mathbb{E}[Y_2 \mid A_0 = a_0, A_1 = a_1, L_0 = l_0, L_1 = l_1, Y_1=1] \\
-&\qquad \times P(L_1 \mid A_0 = a_0, L_0 = l_0, Y_1=1).
-\end{aligned}
-
-
-
-** COMMENT 
-Statins discontinuation or Beta-blockers after MI
-
-- Fill in the standard table:
-  - Left column: *target trial specification*
-  - Right column: *emulated trial specification*
-- Discuss: what is easy to emulate? what is hard?
-
-
-* COMMENT Practical 3
+Note that the data for the exercises are computer simulated and not
+real. The aim is to illustrate the usage of the software. Read in the
+data. They are given in a format which correspond to electronic health
+records (register data) with dates in calendar time.
 
 #+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
 #+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-library(rtmle)
+register_data <- readRDS("~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/practicals/_targets/objects/register_data")
 #+END_SRC
+
+
+
+#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
+#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes  
+library(rtmle)
+intervals <- seq(0,36,3)
+x <- rtmle_init(intervals = length(intervals)-1,name_id = "id",name_outcome = "Death",name_competing = NULL,
+                name_censoring = "Censored",censored_label = "censored")
+register_data$timevar_data$karnofsky <- register_data$timevar_data$karnofsky[value<0,.(id,date)]
+x <- add_long_data(x,
+                   outcome_data=register_data$death_data,
+                   censored_data=register_data$censored_data,
+                   competing_data=NULL,
+                   timevar_data=register_data$timevar_data)
+x <- add_baseline_data(x,data=register_data$baseline_data[,start_followup_date := 0])
+x <- long_to_wide(x,intervals = intervals,start_followup_date = "start_followup_date")
+x <- protocol(x,name = "Always_bactrim",
+              intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
+x <- protocol(x,name = "Always_AP",
+              intervention = data.frame("AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
+x <- prepare_data(x)
+x <- target(x,name = "Outcome_risk",
+            estimator = "tmle",
+            protocols = c("Always_bactrim","Always_AP"))
+x <- model_formula(x,exclude_variables = "AP")
+#+END_SRC
+
+* Practical 4
+
+how do people contribute in interval 4 when they do not follow any regimen?
+does the specification affect this? Markov assumption on the treatment variable?
+
+to what distribution/population is the result standardized to?
+
+
+Bicycle helmet
+Bactrim/AP
+Statins
+surgery
