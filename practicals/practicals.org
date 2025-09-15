@@ -234,7 +234,7 @@ outside the scope of the present paper.
 
 ** Software demonstration/data analysis
 
-Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
+Work through the first part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
 
 * Practical 4
 
