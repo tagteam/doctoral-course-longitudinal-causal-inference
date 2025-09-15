@@ -239,7 +239,7 @@ Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]
 * Practical 4
 
 Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
-The answer the following questions:
+Then answer the following questions:
 
 - What are the estimated risks of PCP under continuous bactrim and AP treatment, respectively?
 - Consider the results for the risk of death from Practical 3 and
