@@ -122,18 +122,9 @@ their inverse probability of censoring weighted versions.
 The authors describe 4 different causal analyses which differ
 regarding how and when the followup data are censored. Describe the
 corresponding 4 treatment regimens/protocols of a target trial (for
-one of the treatments, e.g., bactrim). Write your description in an
-R-markdown or quarto document.
-
-| Analysis | Description in Finkelstein & Robins                                                                                  | Treatment protocol |
-|----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
-| I        | A subject is censored only by loss to or end of follow-up                                                            |                    |
-|----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
-| II       | Regard a subject as dependently censored by the minimum of time to loss to follow-up and time to treatment crossover |                    |
-|----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
-| III      |                                                                                                                      |                    |
-|----------+----------------------------------------------------------------------------------------------------------------------+--------------------|
-| IV       |                                                                                                                      |                    |
+one of the treatments, e.g., bactrim). Write your description in a
+document, e.g., R-markdown or quarto document and discuss with your
+classroom neighbors.
 
 # Possible protocols for the target trial:
 # - Protocol 1 :: During the next 5 years, discontinue statins treatment with a probability of 50% at any day (or doctor visit). Do not resume statins treatment. Stay alive!
@@ -241,121 +232,9 @@ outside the scope of the present paper.
 - Consider specifying an outcome regression at time 8. How would you
   propose to model the effects of the 16 treatment variables? 
 
+** Software demonstration/data analysis
 
-** Data analysis
-
-Note that the data for the exercises are computer simulated and not
-real. The aim is to illustrate the usage of the software. Read in the
-data. They are given in a format which correspond to electronic health
-records (register data) with dates in calendar time.
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-setwd("~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/")
-register_data <- readRDS("practicals/_targets/objects/register_data")
-str(register_data)
-#+END_SRC
-
-The data contain baseline information:
-
-- =gender= person gender
-- =bslkarnofsky= Karnofsky score at time zero (0-100)
-- =start_followup_date= date of first purchase of either AP or bactrim
-
-Time-dependent information:
-
-- =bactrim= Purchase dates of bactrim
-- =AP= Purchase dates of AP
-- =karnofsky= date where Karnofsky score had dropped by at least one unit
-- =PCP= date where a pneumocystis pneumonia event was recorded 
-
-Outcome information: each person has either a date of death or a date
-of last followup (censored date).
-
-Next, initialize an =rtmle= object for the analysis of the survival
-chances and add the data.
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-library(rtmle)
-library(glmnet)
-x <- rtmle_init(intervals = length(intervals)-1,
-                name_id = "id",
-                name_outcome = "Death",
-                name_competing = NULL,
-                name_censoring = "Censored",
-                censored_label = "censored")
-x <- add_long_data(x,
-                   outcome_data=register_data$death_data,
-                   censored_data=register_data$censored_data,
-                   competing_data=NULL,
-                   timevar_data=register_data$timevar_data)
-x <- add_baseline_data(x,data=register_data$baseline_data)
-x$data$baseline_data
-x$long_data
-#+END_SRC
-
-To prepare the LTMLE analysis we discretize the time scale into 9
-intervals, where each interval is 4 months long, starting from the
-individual date where the followup starts, =start_followup_date=.
-Then we map the long data to wide format, still keeping the
-time-varying data in separate data.frames but readily combining the
-outcome and the censored data into a single data.frame.
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-intervals <- seq(0,36*30.45,4*30.45)
-x <- long_to_wide(x,
-                  intervals = intervals,
-                  fun = function(x){1 * (sum(x) > 0)},
-                  start_followup_date = "start_followup_date")
-x$data$timevar_data
-x$data$outcome_data
-#+END_SRC
-
-The next step is to prepare a single wide format dataset where the
-variables are sorted in time (from left to right):
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-x <- prepare_data(x)
-x$prepared_data
-#+END_SRC
-
-Before we continue it is useful to inspect the prepared data. To do
-this, answer the following questions based on the prepared data:
-
-1. How many people initiate bactrim and how many initiate AP?
-2. By the end of the first interval, how many people had a PCP event, died or were censored?
-3. In the 3rd interval, how many people use bactrim, how many AP, how many both, and how many none?
-
-We are now ready to formulate the target parameter:
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-x <- protocol(x,name = "Always_bactrim",
-              intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1")),
-                                        "AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
-x <- protocol(x,name = "Always_AP",
-              intervention = data.frame("bactrim" = factor(rep("0",length(intervals)-1),levels = c("0","1")),
-                                        "AP" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
-x <- target(x,name = "Outcome_risk",
-            estimator = "tmle",
-            protocols = c("Always_bactrim","Always_AP"))
-x$protocols
-x$targets
-#+END_SRC
-
-Finally, before running the analysis we need to specify which
-variables should enter in the regression models:
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-x <- model_formula(x,exclude_variables = "AP_0",Markov = c("karnofsky","PCP"))
-x$models
-#+END_SRC
-
-Note that we declare the variable 'AP_0' as constant because it is
-exactly equal to '1-bactrim_0' and hence would confuse the analyses.
-
-#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
-x$names$name_constant_variables <- c("AP_0",x$names$name_constant_variables)
-x <- run_rtmle(x,learner = "glmnet")
-#+END_SRC
+Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
 
 * Practical 4
 
