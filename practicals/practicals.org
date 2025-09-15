@@ -359,13 +359,24 @@ x <- run_rtmle(x,learner = "glmnet")
 
 * Practical 4
 
+Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
+The answer the following questions:
+
+- What are the estimated risks of PCP under continuous bactrim and AP treatment, respectively?
+- Consider the results for the risk of death from Practical 3 and
+  think about if/how they should play a role in the interpretation of
+  the risks of PCP.
+
+* COMMENT Left overs
+
 how do people contribute in interval 4 when they do not follow any regimen?
 does the specification affect this? Markov assumption on the treatment variable?
 
 to what distribution/population is the result standardized to?
 
 
-Bicycle helmet
+- Bicycle helmet
 Bactrim/AP
 Statins
 surgery
+
