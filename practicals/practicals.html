@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-09-11 tor 15:32 -->
+<!-- 2025-09-15 man 15:31 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Doctoral course: longitudinal causal inference</title>
@@ -60,12 +60,12 @@
 </div>
 <div id="content" class="content">
 <h1 class="title">Doctoral course: longitudinal causal inference</h1>
-<div id="outline-container-orgc6824bf" class="outline-2">
-<h2 id="orgc6824bf"><span class="section-number-2">1.</span> Practical 1</h2>
+<div id="outline-container-orgd2b9980" class="outline-2">
+<h2 id="orgd2b9980"><span class="section-number-2">1.</span> Practical 1</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgdf37424" class="outline-3">
-<h3 id="orgdf37424"><span class="section-number-3">1.1.</span> <span class="todo TODO">TODO</span> </h3>
+<div id="outline-container-org7bcca5f" class="outline-3">
+<h3 id="org7bcca5f"><span class="section-number-3">1.1.</span> <span class="todo TODO">TODO</span> </h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Read the abstract of Robins &amp; Finkelstein (2000). Biometrics 56, pages
@@ -75,7 +75,7 @@ Read the abstract of Robins &amp; Finkelstein (2000). Biometrics 56, pages
 <div class="foldable-example">
 <div class="header">Abstract Robins & Finkelstein (2000) (click to expand)</div>
 <div class="content">
-<pre class="example" id="org3aa1f21">
+<pre class="example" id="org562a233">
 SUMMARY. AIDS Clinical Trial Group (ACTG) randomized trial 021
 compared the effect of bactrim versus aerosolized pentamidine (AP) as
 prophylaxis therapy for pneumocystis pneumonia (PCP) in AIDS patients.
@@ -99,8 +99,8 @@ collected on time-dependent prognostic factors.
 </div>
 </div>
 </div>
-<div id="outline-container-orgb68ec44" class="outline-3">
-<h3 id="orgb68ec44"><span class="section-number-3">1.2.</span> <span class="todo TODO">TODO</span> </h3>
+<div id="outline-container-org8201572" class="outline-3">
+<h3 id="org8201572"><span class="section-number-3">1.2.</span> <span class="todo TODO">TODO</span> </h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Read from the middle of the first column of page 780 starting with
@@ -112,7 +112,7 @@ Read from the middle of the first column of page 780 starting with
 <div class="foldable-example">
 <div class="header">Page 780 Robins & Finkelstein (2000) (click to expand)</div>
 <div class="content">
-<pre class="example" id="org9a35d5b">
+<pre class="example" id="orga671249">
 More precisely, we will report four different causal analyses.
 
 The first analysis is similar to a standard intent-to-treat anal-
@@ -173,8 +173,8 @@ their inverse probability of censoring weighted versions.
 </div>
 </div>
 </div>
-<div id="outline-container-org96d23b4" class="outline-3">
-<h3 id="org96d23b4"><span class="section-number-3">1.3.</span> <span class="todo TODO">TODO</span> </h3>
+<div id="outline-container-org46156c2" class="outline-3">
+<h3 id="org46156c2"><span class="section-number-3">1.3.</span> <span class="todo TODO">TODO</span> </h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 The authors describe 4 different causal analyses which differ
@@ -233,8 +233,8 @@ R-markdown or quarto document.
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf98507" class="outline-2">
-<h2 id="orgbf98507"><span class="section-number-2">2.</span> Practical 2</h2>
+<div id="outline-container-org002fae5" class="outline-2">
+<h2 id="org002fae5"><span class="section-number-2">2.</span> Practical 2</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Inspired by Robins &amp; Finkelstein (2000), we consider the following set
@@ -249,20 +249,22 @@ X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
 <ul class="org-ul">
 <li>\(L_0\) = Indicator of Karnofsky score below 75 before start of time interval 1</li>
 <li>\(V_0\) = Indicator of Asthenia score above 2 before start of time interval 1</li>
-<li>\(A_0\) = Use bactrim (value 1) or aerosolized pentamidine (AP) (value 0) in time interval 1</li>
+<li>\(A_0\) = Initialize therapy with bactrim</li>
+<li>\(B_0\) = Initialize therapy with  aerosolized pentamidine (AP)</li>
 <li>\(C_1\) = Indicator of end of followup in time interval 1</li>
 <li>\(Y_1\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 1</li>
 <li>\(D_1\) = Indicator of death in time interval 1</li>
 <li>\(L_1\) = Indicator of Karnofsky score below 75 before start of time interval 2</li>
 <li>\(V_1\) = Indicator of Asthenia score above 2 before start of time interval 2</li>
-<li>\(A_1\) = Continue (value 1), cross-over (value 2) or stop treatment (value 0) in time interval 2</li>
+<li>\(A_1\) = Exposed to bactrim at end of time interval 1</li>
+<li>\(A_2\) = Exposed to AP at end of time interval 1</li>
 <li>\(C_2\) = Indicator of end of followup in time interval 2</li>
 <li>\(Y_2\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 2</li>
 <li>\(D_2\) = Indicator of death in time interval 2</li>
 </ul>
 </div>
-<div id="outline-container-org4cb58e5" class="outline-3">
-<h3 id="org4cb58e5"><span class="section-number-3">2.1.</span> Mathematics</h3>
+<div id="outline-container-org17672b6" class="outline-3">
+<h3 id="org17672b6"><span class="section-number-3">2.1.</span> Formula</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li>Write the formula for the marginal probability of having a PCP
@@ -274,18 +276,18 @@ map \(\pi^*\) and write the g-formula.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdee78a6" class="outline-3">
-<h3 id="orgdee78a6"><span class="section-number-3">2.2.</span> Statistics</h3>
+<div id="outline-container-org8a8e191" class="outline-3">
+<h3 id="org8a8e191"><span class="section-number-3">2.2.</span> Modelling</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Read the following text about dimension reduction extracted from pages
-781-782 of Robins &amp; Finkelstein:
+  781-782 of Robins &amp; Finkelstein:
 </p>
 
 <div class="foldable-example">
 <div class="header">Extracted text about dimension reduction from pages 781-782 Robins & Finkelstein (2000) (click to expand)</div>
 <div class="content">
-<pre class="example" id="org5f97e77">
+<pre class="example" id="org2dcb426">
 We kept only those prognostic factors significant at the p = .12
 level.  These were Karnovsky score at t coded as one if the Karnovsky
 score was 75 or less and zero otherwise; asthenia score, coded as one
@@ -324,17 +326,28 @@ pneumonia).</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org935ee42" class="outline-3">
-<h3 id="org935ee42"><span class="section-number-3">2.3.</span> Epidemiology</h3>
-<div class="outline-text-3" id="text-2-3">
+</div>
+<div id="outline-container-org4b4b750" class="outline-2">
+<h2 id="org4b4b750"><span class="section-number-2">3.</span> Practical 3</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-orgd8db9e6" class="outline-3">
+<h3 id="orgd8db9e6"><span class="section-number-3">3.1.</span> Design</h3>
+<div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>Suppose a package of bactrim contains 45 pills and a patient is
 supposed to take one pill per day as a longterm prophylactic
 treatment. How would you define the \(A_1\) variable when the time
-interval length is 3 months and you know the drug prescription dates?</li>
+interval length of the discretized time scale is 3 months and you
+know the drug prescription dates?</li>
 <li>Suppose you have data from a patient who has both a PCP event and
 also gets lost to followup in time interval 1. How would you code
 the variables \(Y_1, C_1, D_1\) for this patient?</li>
+<li>How do the treatment data look like for
+<ul class="org-ul">
+<li>a person who initiated AP and then "crossed-over" to use bactrim</li>
+<li>a person who initiated bactrim and then stopped treatment</li>
+</ul></li>
 <li>Suppose your task is to fit a logistic regression model for the risk
 of PCP in time interval 2:
 <ul class="org-ul">
@@ -343,13 +356,112 @@ of PCP in time interval 2:
 <li>Suppose only 4 people above 80 contribute to the analysis and they all 
 stop treatment. Is this a problem and if yes, what can you do about it?</li>
 </ul></li>
+<li>Consider specifying an outcome regression at time 8. How would you
+propose to model the effects of the 16 treatment variables?</li>
 </ul>
 </div>
+</div>
+<div id="outline-container-org5070909" class="outline-3">
+<h3 id="org5070909"><span class="section-number-3">3.2.</span> Data analysis</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Note that the data for the exercises are computer simulated and not
+real. The aim is to illustrate the usage of the software. Read in the
+data. They are given in a format which correspond to electronic health
+records (register data) with dates in calendar time.
+</p>
+
+<p>
+The data contain baseline information:
+</p>
+
+<ul class="org-ul">
+<li><code>gender</code> person gender</li>
+<li><code>bslkarnofsky</code> Karnofsky score at time zero (0-100)</li>
+<li><code>start_followup_date</code> date of first purchase of either AP or bactrim</li>
+</ul>
+
+<p>
+Time-dependent information:
+</p>
+
+<ul class="org-ul">
+<li><code>bactrim</code> Purchase dates of bactrim</li>
+<li><code>AP</code> Purchase dates of AP</li>
+<li><code>karnofsky</code> date where Karnofsky score had dropped by at least one unit</li>
+<li><code>PCP</code> date where a pneumocystis pneumonia event was recorded</li>
+</ul>
+
+<p>
+Outcome information: each person has either a date of death or a date
+of last followup (censored date).
+</p>
+
+<p>
+Next, initialize an <code>rtmle</code> object for the analysis of the survival
+chances and add the data.
+</p>
+
+<p>
+To prepare the LTMLE analysis we discretize the time scale into 9
+intervals, where each interval is 4 months long, starting from the
+individual date where the followup starts, <code>start_followup_date</code>.
+Then we map the long data to wide format, still keeping the
+time-varying data in separate data.frames but readily combining the
+outcome and the censored data into a single data.frame.
+</p>
+
+<p>
+The next step is to prepare a single wide format dataset where the
+variables are sorted in time (from left to right):
+</p>
+
+<p>
+Before we continue it is useful to inspect the prepared data. To do
+this, answer the following questions based on the prepared data:
+</p>
+
+<ol class="org-ol">
+<li>How many people initiate bactrim and how many initiate AP?</li>
+<li>By the end of the first interval, how many people had a PCP event, died or were censored?</li>
+<li>In the 3rd interval, how many people use bactrim, how many AP, how many both, and how many none?</li>
+</ol>
+
+<p>
+We are now ready to formulate the target parameter:
+</p>
+
+<p>
+Finally, before running the analysis we need to specify which
+variables should enter in the regression models:
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org9046161" class="outline-2">
+<h2 id="org9046161"><span class="section-number-2">4.</span> Practical 4</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+how do people contribute in interval 4 when they do not follow any regimen?
+does the specification affect this? Markov assumption on the treatment variable?
+</p>
+
+<p>
+to what distribution/population is the result standardized to?
+</p>
+
+
+<p>
+Bicycle helmet
+Bactrim/AP
+Statins
+surgery
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-Last update: 11 sep 2025 by Thomas Alexander Gerds.
+Last update: 15 sep 2025 by Thomas Alexander Gerds.
 </div>
 </body>
 </html>

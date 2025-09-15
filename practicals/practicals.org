@@ -151,13 +151,15 @@ X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
 
 - \(L_0\) = Indicator of Karnofsky score below 75 before start of time interval 1
 - \(V_0\) = Indicator of Asthenia score above 2 before start of time interval 1 
-- \(A_0\) = Use bactrim (value 1) or aerosolized pentamidine (AP) (value 0) in time interval 1
+- \(A_0\) = Initialize therapy with bactrim
+- \(B_0\) = Initialize therapy with  aerosolized pentamidine (AP)
 - \(C_1\) = Indicator of end of followup in time interval 1  
 - \(Y_1\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 1
 - \(D_1\) = Indicator of death in time interval 1
 - \(L_1\) = Indicator of Karnofsky score below 75 before start of time interval 2
 - \(V_1\) = Indicator of Asthenia score above 2 before start of time interval 2
-- \(A_1\) = Continue (value 1), cross-over (value 2) or stop treatment (value 0) in time interval 2
+- \(A_1\) = Exposed to bactrim at end of time interval 1
+- \(A_2\) = Exposed to AP at end of time interval 1 
 - \(C_2\) = Indicator of end of followup in time interval 2  
 - \(Y_2\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 2
 - \(D_2\) = Indicator of death in time interval 2
@@ -227,12 +229,18 @@ outside the scope of the present paper.
 - Suppose you have data from a patient who has both a PCP event and
   also gets lost to followup in time interval 1. How would you code
   the variables \(Y_1, C_1, D_1\) for this patient?
+- How do the treatment data look like for
+  + a person who initiated AP and then "crossed-over" to use bactrim
+  + a person who initiated bactrim and then stopped treatment
 - Suppose your task is to fit a logistic regression model for the risk
   of PCP in time interval 2:
   + Who do you include in the analysis?
   + What is the interpretation of the odds?
   + Suppose only 4 people above 80 contribute to the analysis and they all 
     stop treatment. Is this a problem and if yes, what can you do about it?
+- Consider specifying an outcome regression at time 8. How would you
+  propose to model the effects of the 16 treatment variables? 
+
 
 ** Data analysis
 
@@ -241,36 +249,112 @@ real. The aim is to illustrate the usage of the software. Read in the
 data. They are given in a format which correspond to electronic health
 records (register data) with dates in calendar time.
 
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
-#+BEGIN_SRC R  :results output raw  :exports code  :session *R* :cache yes  
-register_data <- readRDS("~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/practicals/_targets/objects/register_data")
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
+setwd("~/metropolis/Teaching/doctoral-course-longitudinal-causal-inference/")
+register_data <- readRDS("practicals/_targets/objects/register_data")
+str(register_data)
 #+END_SRC
 
+The data contain baseline information:
 
+- =gender= person gender
+- =bslkarnofsky= Karnofsky score at time zero (0-100)
+- =start_followup_date= date of first purchase of either AP or bactrim
 
-#+ATTR_LATEX: :options otherkeywords={}, deletekeywords={}
-#+BEGIN_SRC R  :results output raw drawer  :exports both  :session *R* :cache yes  
+Time-dependent information:
+
+- =bactrim= Purchase dates of bactrim
+- =AP= Purchase dates of AP
+- =karnofsky= date where Karnofsky score had dropped by at least one unit
+- =PCP= date where a pneumocystis pneumonia event was recorded 
+
+Outcome information: each person has either a date of death or a date
+of last followup (censored date).
+
+Next, initialize an =rtmle= object for the analysis of the survival
+chances and add the data.
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
 library(rtmle)
-intervals <- seq(0,36,3)
-x <- rtmle_init(intervals = length(intervals)-1,name_id = "id",name_outcome = "Death",name_competing = NULL,
-                name_censoring = "Censored",censored_label = "censored")
-register_data$timevar_data$karnofsky <- register_data$timevar_data$karnofsky[value<0,.(id,date)]
+library(glmnet)
+x <- rtmle_init(intervals = length(intervals)-1,
+                name_id = "id",
+                name_outcome = "Death",
+                name_competing = NULL,
+                name_censoring = "Censored",
+                censored_label = "censored")
 x <- add_long_data(x,
                    outcome_data=register_data$death_data,
                    censored_data=register_data$censored_data,
                    competing_data=NULL,
                    timevar_data=register_data$timevar_data)
-x <- add_baseline_data(x,data=register_data$baseline_data[,start_followup_date := 0])
-x <- long_to_wide(x,intervals = intervals,start_followup_date = "start_followup_date")
-x <- protocol(x,name = "Always_bactrim",
-              intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
-x <- protocol(x,name = "Always_AP",
-              intervention = data.frame("AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
+x <- add_baseline_data(x,data=register_data$baseline_data)
+x$data$baseline_data
+x$long_data
+#+END_SRC
+
+To prepare the LTMLE analysis we discretize the time scale into 9
+intervals, where each interval is 4 months long, starting from the
+individual date where the followup starts, =start_followup_date=.
+Then we map the long data to wide format, still keeping the
+time-varying data in separate data.frames but readily combining the
+outcome and the censored data into a single data.frame.
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
+intervals <- seq(0,36*30.45,4*30.45)
+x <- long_to_wide(x,
+                  intervals = intervals,
+                  fun = function(x){1 * (sum(x) > 0)},
+                  start_followup_date = "start_followup_date")
+x$data$timevar_data
+x$data$outcome_data
+#+END_SRC
+
+The next step is to prepare a single wide format dataset where the
+variables are sorted in time (from left to right):
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
 x <- prepare_data(x)
+x$prepared_data
+#+END_SRC
+
+Before we continue it is useful to inspect the prepared data. To do
+this, answer the following questions based on the prepared data:
+
+1. How many people initiate bactrim and how many initiate AP?
+2. By the end of the first interval, how many people had a PCP event, died or were censored?
+3. In the 3rd interval, how many people use bactrim, how many AP, how many both, and how many none?
+
+We are now ready to formulate the target parameter:
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
+x <- protocol(x,name = "Always_bactrim",
+              intervention = data.frame("bactrim" = factor(rep("1",length(intervals)-1),levels = c("0","1")),
+                                        "AP" = factor(rep("0",length(intervals)-1),levels = c("0","1"))))
+x <- protocol(x,name = "Always_AP",
+              intervention = data.frame("bactrim" = factor(rep("0",length(intervals)-1),levels = c("0","1")),
+                                        "AP" = factor(rep("1",length(intervals)-1),levels = c("0","1"))))
 x <- target(x,name = "Outcome_risk",
             estimator = "tmle",
             protocols = c("Always_bactrim","Always_AP"))
-x <- model_formula(x,exclude_variables = "AP")
+x$protocols
+x$targets
+#+END_SRC
+
+Finally, before running the analysis we need to specify which
+variables should enter in the regression models:
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
+x <- model_formula(x,exclude_variables = "AP_0",Markov = c("karnofsky","PCP"))
+x$models
+#+END_SRC
+
+Note that we declare the variable 'AP_0' as constant because it is
+exactly equal to '1-bactrim_0' and hence would confuse the analyses.
+
+#+BEGIN_SRC R  :results output :exports (exercise-with-code) :cache yes :eval (never-plain-export)
+x$names$name_constant_variables <- c("AP_0",x$names$name_constant_variables)
+x <- run_rtmle(x,learner = "glmnet")
 #+END_SRC
 
 * Practical 4
