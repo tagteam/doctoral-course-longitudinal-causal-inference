@@ -12,9 +12,7 @@
 # #+setupfile:~/emacs-genome/snps/org-templates/setup-all-purpose.org
 #+superman-org-export-target: html
 
-
 * Practical 1
-
 
 ** TODO 
 
