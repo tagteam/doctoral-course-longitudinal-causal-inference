@@ -121,7 +121,7 @@ The authors describe 4 different causal analyses which differ
 regarding how and when the followup data are censored. Describe the
 corresponding 4 treatment regimens/protocols of a target trial (for
 one of the treatments, e.g., bactrim). Write your description in a
-document, e.g., R-markdown or quarto document and discuss with your
+document, e.g., a R-markdown or quarto document and discuss with your
 classroom neighbors.
 
 # Possible protocols for the target trial:
@@ -153,14 +153,10 @@ X = (L_0,V_0,A_0,C_1,Y_1,D_1,L_1,V_1,A_1,C_2,Y_2,D_2)
 - \(Y_2\) = Indicator of pneumocystis pneumonia (PCP) event in time interval 2
 - \(D_2\) = Indicator of death in time interval 2
 
-** Formula
+** Intervention map
 
-- Write the formula for the marginal probability of having a PCP
-  pneumocystis pneumonia event before the end of the second time
-  interval in terms of the conditional probabilities of the other
-  variables.
 - For each of the 4 protocols of Practical 1, define the intervention
-  map \(\pi^*\) and write the g-formula.
+  map \(\pi^*\) which describes the treatment over time.
    
 ** Modelling
 
@@ -206,8 +202,6 @@ outside the scope of the present paper.
   score, hemoglobin, white blood count, CD4 count, pneumocystis
   pneumonia).
 
-* Practical 3
-
 ** Design
 
 - Suppose a package of bactrim contains 45 pills and a patient is
@@ -218,7 +212,7 @@ outside the scope of the present paper.
 - Suppose you have data from a patient who has both a PCP event and
   also gets lost to followup in time interval 1. How would you code
   the variables \(Y_1, C_1, D_1\) for this patient?
-- How do the treatment data look like for
+- What values do the treatment variables have for
   + a person who initiated AP and then "crossed-over" to use bactrim
   + a person who initiated bactrim and then stopped treatment
 - Suppose your task is to fit a logistic regression model for the risk
@@ -230,19 +224,14 @@ outside the scope of the present paper.
 - Consider specifying an outcome regression at time 8. How would you
   propose to model the effects of the 16 treatment variables? 
 
-** Software demonstration/data analysis
+* Practical 3
 
-Work through the first part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
+Work through the section 'Code for practicals III' in the R-markdown file [[./demo-rtmle-survival.Rmd]] 
 
 * Practical 4
 
-Work through the second part of the R-markdown file [[./demo-rtmle-survival.Rmd]] 
-Then answer the following questions:
+Work through the section 'Code for practicals IV' in the R-markdown file [[./demo-rtmle-survival.Rmd]] 
 
-- What are the estimated risks of PCP under continuous bactrim and AP treatment, respectively?
-- Consider the results for the risk of death from Practical 3 and
-  think about if/how they should play a role in the interpretation of
-  the risks of PCP.
 
 * COMMENT Left overs
 
