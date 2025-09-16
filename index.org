@@ -19,18 +19,23 @@ install_github("tagteam/rtmle")
 
 ** Plan 
 
-- Target trial emulation
-- Practical I 
+- 9:15 Target trial emulation (30 min)
+- 9:45 Practical I (30 min)
 
  break 
 
-- Roadmap of statistical learning
-- Practical II 
+- 10:30 Roadmap of statistical learning (30 min)
+- Practical II (30 min)
 
  lunch
 
-- Longitudinal targeted minimum-loss based estimation
-- Practical III
+- 13:00 Longitudinal targeted minimum-loss based estimation (30 min)
+- 13:30 Practical III (30 min)
+
+ break
+
+- 14:15 Software tutorial (30 min)
+- 14:45 Practical IV (30 min)
 
 
 ** Material
